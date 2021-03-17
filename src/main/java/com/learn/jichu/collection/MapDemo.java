@@ -1,8 +1,6 @@
 package com.learn.jichu.collection;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class MapDemo {
     public static void main(String[] args) {
@@ -27,5 +25,17 @@ public class MapDemo {
                 list.remove(key);
             }
         }
+        Map map = new HashMap<>();
+        map.put("a","1");
+        map.put("b","2");
+        map.put("c","3");
+        Iterator<Map.Entry> iterator1 = map.entrySet().iterator();
+        while(iterator1.hasNext()){
+            Map.Entry entry = iterator1.next();
+            String key = entry.getKey().toString();
+            String value = entry.getValue().toString();
+            System.out.println("key ="+key +",value = "+value);
+        }
+
     }
 }
