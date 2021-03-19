@@ -1,13 +1,18 @@
 package com.learn.jichu.collection;
 
 import java.util.*;
-
+/**
+ * 实现了randomAccess的集合尽量使用foreach,map优先使用iterator
+ * */
 public class MapDemo {
     public static void main(String[] args) {
 //        System.out.println(Integer.compare(0,0));
         List<String> list = new ArrayList<String>();
         list.add("1");
         list.add("2");
+        list.forEach(e ->{
+            System.out.println(e);
+        });
         Iterator<String> iterator = list.iterator();
         while(iterator.hasNext()){
             String item = iterator.next();

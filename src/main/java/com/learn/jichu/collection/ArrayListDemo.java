@@ -14,11 +14,11 @@ public class ArrayListDemo {
      * ArrayList扩容
      * */
     public static void main(String[] args) {
-       /* List list = new ArrayList<>();
+        /*List list = new ArrayList<>();
         System.out.println("list size:"+list.size());
         list.add("a");
-
-        int[] a = new int[10];
+        list.add("B");*/
+        /*int[] a = new int[10];
         a[0] = 0;
         a[1] = 1;
         a[2] = 2;
@@ -34,7 +34,7 @@ public class ArrayListDemo {
         //elementData:源数组;index:源数组中的起始位置;elementData：目标数组；index + 1：目标数组中的起始位置； size - index：要复制的数组元素的数量；
         //System.arraycopy(elementData, index, elementData, index + 1, size - index);
         System.arraycopy(a, 2, a, 3, 1);
-//        a[2]=99;
+        a[2]=99;
         for (int i = 0; i < a.length; i++) {
             System.out.print(a[i] + " ");
         }*/
@@ -46,10 +46,13 @@ public class ArrayListDemo {
         System.out.println("a1.length"+a1.length);
         int[] b = Arrays.copyOf(a1, 10);
         System.out.println("b.length"+b.length);
+        for(int i=0 ;i <b.length;i++){
+            System.out.println(b[i]);
+        }
         //Arrays.asList()的坑
-       /* List list = Arrays.asList(a1);
-        System.out.println(list.get(0));
-        System.out.println(list.get(1));*/
+        List list = Arrays.asList(a1);
+        System.out.println("----"+list.get(0).toString());
+        System.out.println(list.get(1));
 
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
         // 第二种方式(容易理解)
