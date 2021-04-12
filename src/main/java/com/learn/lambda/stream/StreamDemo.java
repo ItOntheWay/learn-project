@@ -1,12 +1,10 @@
 package com.learn.lambda.stream;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.IntSummaryStatistics;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * @author jpb
@@ -73,17 +71,18 @@ public class StreamDemo {
         * https://blog.csdn.net/icarusliu/article/details/79504602
         * reduce 以及collect 方法
         * */
-        Stream s = Stream.of(1,2,3,4,5,6,7,8,9);
+//        Stream s = Stream.of(1,2,3,4,5,6,7,8,9);
 //        s.forEach(o-> System.out.println(o));
         // peek:使用传入的Consumer对象对所有元素进行消费后，返回一个新的包含所有原来元素的Stream对象
         //map:元素一对一转换：使用传入的Function对象对Stream中的所有元素进行处理，返回的Stream对象中的元素为原元素处理后的结果
-        s.peek(x -> System.out.println("a"+x)).limit(2).forEach(o->System.out.println(o));
+//        s.peek(x -> System.out.println("a"+x)).limit(2).forEach(o->System.out.println(o));
 //        s.peek(x->System.out.println("A"+x)).limit(3).map(n -> (int)n>0?n:0).forEach(o -> System.out.println(o));
 //        s.limit(3).map(o-> o+"...").forEach(o-> System.out.println(o));
 //        s.peek(x->System.out.println("A"+x)).peek(m -> System.out.println("b"+m)).limit(3).forEach(o-> System.out.println(o));
 
-       /* Iterator<String> sourceIterator = Arrays.asList("A", "B", "C").iterator();
-        Stream<String> targetStream = Stream.generate(sourceIterator::next);
+        //流generate(Supplier s)返回无限顺序无序流
+        /*Iterator<String> sourceIterator = new ArrayList<>(Arrays.asList("A", "B", "C")).iterator();
+        Stream<String> targetStream = Stream.generate(sourceIterator::next).limit(3);
         targetStream.forEach(System.out::println);*/
         //generator方法，返回一个无限长度的Stream
         /*Iterator<String> sourceIterator = Arrays.asList("A", "B", "C").iterator();
@@ -99,12 +98,12 @@ public class StreamDemo {
         //两个参数 例如：stream中所有元素拼接再在前面添加value
         /*Stream<String> s = Stream.of("test", "t1", "t2", "teeeee", "aaaa", "taaa");
         String res = s.reduce("value",(a,b)-> a.concat(b));
-        System.out.println(res);*/
-        /*List<Integer> array = Arrays.asList(3, 5, 3, 2);
+        System.out.println(res);
+        List<Integer> array = Arrays.asList(3, 5, 3, 2);
         Optional<Integer> he = array.stream().reduce((o1,o2)->{return o1+o2;});
         System.out.println("list的.."+he.get());*/
         //三个参数 非并行，第三个参数不生效，例：
-        /*Stream<String> s1 = Stream.of("aa", "ab", "c", "ad");
+       /* Stream<String> s1 = Stream.of("aa", "ab", "c", "ad");
         ArrayList<String> list = s1.reduce(new ArrayList<String>(),(r,t) -> { r.add(t); return  r; },(m,n) -> m );
         System.out.println(list);*/
 
@@ -118,21 +117,28 @@ public class StreamDemo {
         //举个简单点的例子，计算4+1+2+3的结果，其中4是初始值：
         //例:非并行下 第一个参数4作为初始值，执行第二个参数的表达式即 4+1=5，5+2=7,7+3=10；
         /*Integer tes = Stream.of(1, 2, 3).reduce(4, (s1, s2) -> s1 + s2, (s1, s2) -> s1 + s2);
-        System.out.println(tes);*/
-        /*Stream<Integer> s2 = Stream.of(1, 2, 3);
-        Integer result = s2.reduce(4,(r,t)->{ return r+t;},(m,n)->{return (m+n) ;}); //非并行*/
+        System.out.println(tes);
+        Stream<Integer> s2 = Stream.of(1, 2, 3);
+        Integer result = s2.reduce(4,(r,t)->{ return r+t;},(m,n)->{return (m+n) ;}); //非并行
+        System.out.println(result);*/
 //并行，类似多线程 第一个参数4相当于线程内存值（拷贝内存数据）
 //因此计算过程现在是这样的：线程1：1 + 4 = 5；线程2：2 + 4 = 6；线程3：3 + 4 = 7；Combiner函数： 5 + 6 + 7 = 18！
         /*Stream<Integer> s2 = Stream.of(1, 2, 3);
         Integer result = s2.parallel().reduce(4,(r,t)->{ return r+t;},(m,n)->{return (m+n) ;});
         System.out.println(result);*/
 //        System.out.println(Stream.of(1, 2, 3).map(n -> n + 4).reduce((s1, s2) -> s1 * s2));
-//        Stream<String> s1 = Stream.of("aa", "ab", "c", "ad");
 //模拟Filter查找其中含有字母a的所有元素，由于使用了r1.addAll(r2)，其打印结果将不会是预期的aa ab ad
         //当Stream是并行时，第三个参数就有意义了，它会将不同线程计算的结果调用combiner做汇总后返回。
+        //TODO 没搞明白执行规则
         /*Stream<String> s1 = Stream.of("aa", "ab", "c", "ad");
-        Predicate<String> predicate = t -> t.contains("a");
+        Predicate<String> predicate = t -> t.contains("c");
         s1.parallel().reduce(new ArrayList<String>(), (r, t) -> {if (predicate.test(t)) r.add(t);  return r; },
-                (r1, r2) -> { r1.addAll(r2); return r1; }).stream().forEach(System.out::println);*/
+                (r1, r2) -> {
+            System.out.println("---"+r1);
+                    System.out.println("###"+r2);
+                    r1.add(r2.get(0));
+                    System.out.println("***"+r1);
+                    return r1;
+        }).stream().forEach(System.out::println);*/
     }
 }

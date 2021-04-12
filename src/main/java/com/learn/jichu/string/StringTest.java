@@ -39,9 +39,12 @@ public class StringTest {
         String authStr = "shmeifang_shmeifang20190410_"+ sdf.format(new Date());
         System.out.println(authStr);
         System.out.println(DigestUtils.md5Hex(DigestUtils.md5Hex(authStr)));*/
-        String ext = "{\"content\":\"内容\",\"extra\":{\"meifang\":{\"username\":\"经纪人账号\"}}}";
+        /*String ext = "{\"content\":\"内容\",\"extra\":{\"meifang\":{\"username\":\"经纪人账号\"}}}";
         JSONObject json = JSONObject.parseObject(ext);
         JSONObject extra = json.getJSONObject("extra");
-        System.out.println(extra.getJSONObject("meifang").toJSONString());
+        System.out.println(extra.getJSONObject("meifang").toJSONString());*/
+        String version = "3.0.0";
+        Integer s = Integer.valueOf(version.replace(".",""));
+        System.out.println(s);
     }
 }
