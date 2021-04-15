@@ -42,4 +42,9 @@ public class UserDao {
     public void setVersion(String version) {
         this.version = version;
     }
+    UserDao(){}
+    UserDao(Integer id,String name){
+        this.id = id;
+        this.name = name;
+    }
 }
